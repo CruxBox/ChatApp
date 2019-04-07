@@ -11,6 +11,7 @@
 #include <netinet/tcp.h>
 #include <pthread.h>
 #include <unistd.h>
+#include <inttypes.h>
 using namespace std;
 
 #define PORT 6969
@@ -72,7 +73,7 @@ int main(int argc,char *argv[]){
 
     while(1){
         connsock=accept(listensock,(sockaddr*)NULL,NULL);
-        result=pthread_create(&thread_id,NULL,thread_proc,(void*)connsock);
+        result=pthread_create(&thread_id,NULL,thread_proc,(void*)(intptr_t)connsock);
         if(result!=0){
             printf("Thread not created.\n");
             exit(3);
@@ -86,7 +87,7 @@ int main(int argc,char *argv[]){
 
 
 void* thread_proc(void* arg){
-    int sock=(int)arg;
+    int sock= (intptr_t)arg;
     char BUFFER[MAX_LINE_BUFF];
     int nread;
     int flag=1;
