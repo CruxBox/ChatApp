@@ -1,13 +1,13 @@
+
 #include <sys/socket.h>
+#include <chatcli.h>
+#include <chatwin.h>
 #include <QVBoxLayout>
 #include <qpushbutton.h>
 #include <qmessagebox.h>
 #include <qapplication.h>
 #include <qinputdialog.h>
-#include <chatwin.h>
-#include <chatcli.h>
 #include <Qt>
-
 cChatWin::cChatWin() : QMainWindow(){
     this->setWindowTitle("Chat Client");
     QWidget *big = new QWidget();
@@ -75,7 +75,8 @@ void cChatWin::sendButtonClicked(){
     if(msgEdit->text() == ""){
         return;
     }
-    send_string = "MSG " + string::basic_string(msgEdit->text().toAscii) + '\n';
+    QString temp = msgEdit->text().toAscii();
+    send_string = "MSG " + temp.toStdString() + '\n';
     send(client_socket,send_string.c_str(),send_string.length(),0);
     status = readLine(client_socket,buffer, MAX_LINE_BUFF);
 
@@ -104,15 +105,19 @@ void cChatWin::pvtButtonClicked()
     if (msgEdit->text() == "") {
         return;
     }
-    if (userList->currentItem->text().toAscii == "") {
+    QString temp;
+    temp = userList->currentItem()->text().toAscii();
+    if (temp.toStdString() == "") {
         QMessageBox::critical(NULL, "Private Message","You must select a user before sending a private message.");
         return;
     }
-    username = userList->currentItem->text().toAscii;
+
+    username = temp.toStdString();
     if(username[0]=='@'){
         username = username.substr(1);
     }
-    send_string = "PMSG " + username + " " + string::basic_string(msgEdit->text().toAscii) + "\n";
+    temp = msgEdit->text().toAscii();
+    send_string = "PMSG " + username + " " + temp.toStdString() + "\n";
     send(client_socket,send_string.c_str(),send_string.length(),0);
     status = readLine(client_socket,buffer,MAX_LINE_BUFF);
     if(status<0){
@@ -145,7 +150,8 @@ char buffer[MAX_LINE_BUFF];
 commands cmd;
 int status;
 string username;
-    if (userList->currentItem->text() == "") {
+    QString temp = userList->currentItem()->text().toAscii();
+    if ( temp.toStdString() == "") {
         QMessageBox::critical(NULL, "Op Error","You must select a user before making them an operator.");
         return;
     }
@@ -185,11 +191,12 @@ void cChatWin::kickButtonClicked(){
     commands cmd;
     int status;
     string username;
-    if (userList->currentItem->text().toAscii == "") {
+    QString temp = userList->currentItem()->text().toAscii();
+    if ( temp.toStdString() == "") {
         QMessageBox::critical(NULL, "Private Message","You must select a user before sending a private message.");
         return;
     }
-    username = userList->currentItem->text().toAscii;
+    username = temp.toStdString();
     if(username[0]=='@'){
         username = username.substr(1);
     }
@@ -231,7 +238,9 @@ void cChatWin::topicButtonClicked(){
     if(ok==false || topic.isEmpty()){
         return;
     }
-    send_string = "TOPIC " + string::basic_string(topic.toAscii)+"\n";
+    QString temp;
+    temp = topic.toAscii();
+    send_string = "TOPIC " + temp.toStdString()+"\n";
     send(client_socket, send_string.c_str(),send_string.length(),0);
     status = readLine(client_socket,buffer,MAX_LINE_BUFF);
     if(status<0){
@@ -309,9 +318,11 @@ void cChatWin::timerFired()
         }
         else if(cmd.command=="OP"){
             bool check = false;
-            for(int i=0;i<userList->size;i++){
-                if(userList->item(i)->text().toAscii == cmd.operand1){
-                    userList->item(i)->setText("@"+cmd.operand1.c_str);
+            QString temp;
+            for(int i=0;i< userList->count();i++){
+                temp=userList->item(i)->text().toAscii();
+                if( temp.toStdString()== cmd.operand1){
+                    userList->item(i)->setText(("@"+cmd.operand1).c_str());
                     str = cmd.operand1 + " has been made a room operator.\n";
                     
                     check = true;
@@ -323,13 +334,15 @@ void cChatWin::timerFired()
         }
         else if(cmd.command=="KICK"){
             bool check = false;
-            for(int i=0;i<userList->size;i++){
-                if(userList->item(i)->text().toAscii == cmd.operand1){
+            QString temp;
+            for(int i=0;i<userList->count();i++){
+                temp = userList->item(i)->text().toAscii();
+                if( temp.toStdString() == cmd.operand1){
                     userList->removeItemWidget(userList->item(i));
                     check=true;
                     break;
                 }
-                else if(userList->item(i)->text().toAscii == (cmd.operand1.c_str + "@")){
+                else if(temp.toStdString() == ((cmd.operand1+"@").c_str())){
                     userList->removeItemWidget(userList->item(i));
                     check=true;
                     break;
@@ -350,13 +363,15 @@ void cChatWin::timerFired()
         }
         else if(cmd.command=="QUIT"){
             bool check=false;
-            for(int i=0;i<userList->size;i++){
-                if(userList->item(i)->text().toAscii == cmd.operand1){
+            QString temp;
+            for(int i=0;i<userList->count();i++){
+                temp = userList->item(i)->text().toAscii();
+                if( temp.toStdString()== cmd.operand1){
                     userList->removeItemWidget(userList->item(i));
                     check=true;
                     break;
                 }
-                else if(userList->item(i)->text().toAscii == (cmd.operand1.c_str + "@")){
+                else if(temp.toStdString() == ((cmd.operand1+"@").c_str())){
                     userList->removeItemWidget(userList->item(i));
                     check=true;
                     break;
@@ -370,5 +385,7 @@ void cChatWin::timerFired()
     }
     theTimer->start(250);
 }
-
+int main(void){
+    return 0;
+}
  

@@ -1,10 +1,12 @@
 #ifndef CHATWIN_H
 #define CHATWIN_H
+
 #include <qmainwindow.h>
 #include <qtextedit.h>
 #include <qlineedit.h>
 #include <QListWidget>
 #include <qtimer.h>
+
 class cChatWin : public QMainWindow
 {
     Q_OBJECT

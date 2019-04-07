@@ -1,3 +1,4 @@
+
 #define _XOPEN_SOURCE 600
 #include <unistd.h>
 #include <sys/ioctl.h>
@@ -8,21 +9,21 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 #include <string>
-#include <qapplication.h>
-#include <qmessagebox.h>
 #include "logindlg.h"
 #include "chatwin.h"
 #include "chatcli.h"
 
+#include <qapplication.h>
+#include <qmessagebox.h>
 using namespace std;
 
 int client_socket;
 
 int main(int argc, char** argv){
     cLoginDlg *logindlg;
-    string host;
+    QString host;
     int port;
-    string nickname;
+    QString nickname;
 
     QApplication app(argc,argv);
 
@@ -32,11 +33,12 @@ int main(int argc, char** argv){
             delete logindlg;
             return 0;
         }
-        host = logindlg->hostEdit->text().toAscii;
-        port=(logindlg->portEdit->text().toInt);
-        nickname=logindlg->nickEdit->text().toAscii;
+        host = logindlg->hostEdit->text().toAscii();
+
+        port=(logindlg->portEdit->text().toInt());
+        nickname=logindlg->nickEdit->text().toAscii();
     
-    }while(connectAndJoin(host,port,nickname)==0);
+    }while(connectAndJoin(host.toStdString(),port,nickname.toStdString())==0);
 
     cChatWin *chatwin = new cChatWin();
     chatwin->client_socket = client_socket;

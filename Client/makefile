@@ -1,5 +1,6 @@
 CC=g++
-INDIR = -I $(QTDIR)/include
+QTDIR=/usr/include/qt4/Qt
+INDIR = -I $(QTDIR)
 LDFLAGS = -L $(QTDIR)/lib -lqt-mt
 
 all: chatcli

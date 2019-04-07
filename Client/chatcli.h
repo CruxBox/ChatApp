@@ -1,4 +1,4 @@
-/*chatcli.h*/
+
 #ifndef CHATCLI_H
 #define CHATCLI_H
 

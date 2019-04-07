@@ -1,14 +1,15 @@
+
+#include "logindlg.h"
+#include "chatcli.h"
+#include <sys/socket.h>
+
+#include "chatwin.h"
+#include <qmessagebox.h>
+#include <QDialog>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <qlabel.h>
 #include <qpushbutton.h>
-#include "logindlg.h"
-#include "chatcli.h"
-#include "chatwin.h"
-#include <QDialog>
-#include <sys/socket.h>
-#include <qmessagebox.h>
-
 cLoginDlg:: cLoginDlg(QWidget *parent) : QDialog(parent){
     this->setMinimumHeight(110);
     this->setMinimumWidth(200);
@@ -19,7 +20,7 @@ cLoginDlg:: cLoginDlg(QWidget *parent) : QDialog(parent){
     QHBoxLayout *row1 = new QHBoxLayout(this);
     row1->setSpacing(3);
     QLabel* hostlabel = new QLabel();
-    hostlabel->setText = "Host";
+    hostlabel->setText("Host");
     row1->addWidget(hostlabel);
     hostEdit = new QLineEdit();
     row1->addWidget(hostEdit);
