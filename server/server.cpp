@@ -295,7 +295,7 @@ int join_command(const commands &cmd,string &msg){
     }
     return retval;
 }
-int msg_command(struct commands &cmd,const string &nickname,string &msg){
+int msg_command(const struct commands &cmd,const string &nickname,string &msg){
     map<string,client_t>::iterator client_iter;
 
     pthread_mutex_lock(&client_list_mutex);
