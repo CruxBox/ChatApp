@@ -19,7 +19,7 @@ struct commands{
 
 //function declarations
 int connectAndJoin(string host,int port,string nickname);
-int readLine(int sock,char*buffer,int size);
+int readLine(int sock,char*buffer,int size,int timeout);
 commands decodeCommand(const char *buffer);
 
 #endif

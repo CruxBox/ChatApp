@@ -19,6 +19,8 @@ using namespace std;
 
 int client_socket;
 
+int readLine(int,char*,int,int);
+commands decodeCommand(const char*);
 int main(int argc, char** argv){
     cLoginDlg *logindlg;
     QString host;
@@ -80,7 +82,7 @@ if(dotaddr){
     
     joinString = "JOIN " + nickname + "\n";
     send(client_socket,joinString.c_str(),joinString.length(),0);
-    readLine(client_socket,buffer,MAX_LINE_BUFF);
+    readLine(client_socket,buffer,MAX_LINE_BUFF,0);
     cmd = decodeCommand(buffer);
 
     if(cmd.command=="100"){

@@ -11,7 +11,7 @@
 #include <qlabel.h>
 #include <qpushbutton.h>
 cLoginDlg:: cLoginDlg(QWidget *parent) : QDialog(parent){
-    this->setMinimumHeight(110);
+    this->setMinimumHeight(130);
     this->setMinimumWidth(200);
     this->setWindowTitle("Connect");
     
@@ -28,11 +28,11 @@ cLoginDlg:: cLoginDlg(QWidget *parent) : QDialog(parent){
 
     QHBoxLayout *row2 = new QHBoxLayout();
     row2->setSpacing(3);
-    QLabel *portlabel = new QLabel();
+    QLabel* portlabel = new QLabel();
     portlabel->setText("Port");
     row2->addWidget(portlabel);
     portEdit = new QLineEdit();
-
+    row2->addWidget(portEdit);
     main->addLayout(row2,1);
 
     QHBoxLayout *row3 = new QHBoxLayout();

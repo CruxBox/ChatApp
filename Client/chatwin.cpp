@@ -11,7 +11,7 @@
 cChatWin::cChatWin() : QMainWindow(){
     this->setWindowTitle("Chat Client");
     QWidget *big = new QWidget();
-    big->setMinimumHeight(303);
+    big->setMinimumHeight(350);
     big->setMinimumWidth(400);
     QVBoxLayout *main = new QVBoxLayout(this);
     main->setSpacing(3);
@@ -78,7 +78,7 @@ void cChatWin::sendButtonClicked(){
     QString temp = msgEdit->text().toAscii();
     send_string = "MSG " + temp.toStdString() + '\n';
     send(client_socket,send_string.c_str(),send_string.length(),0);
-    status = readLine(client_socket,buffer, MAX_LINE_BUFF);
+    status = readLine(client_socket,buffer, MAX_LINE_BUFF,0);
 
     if (status < 0) {
         theTimer->stop();
@@ -119,7 +119,7 @@ void cChatWin::pvtButtonClicked()
     temp = msgEdit->text().toAscii();
     send_string = "PMSG " + username + " " + temp.toStdString() + "\n";
     send(client_socket,send_string.c_str(),send_string.length(),0);
-    status = readLine(client_socket,buffer,MAX_LINE_BUFF);
+    status = readLine(client_socket,buffer,MAX_LINE_BUFF,0);
     if(status<0){
         theTimer->stop();
         QMessageBox::critical(NULL,"Lost Connection", "The server has closed the connection.");
@@ -157,7 +157,7 @@ string username;
     }
 send_string = "OP " + username + "\n";
 send(client_socket, send_string.c_str(), send_string.length(), 0);
-status = readLine(client_socket, buffer, MAX_LINE_BUFF);
+status = readLine(client_socket, buffer, MAX_LINE_BUFF,0);
 
 if (status < 0) {
     theTimer->stop();
@@ -202,7 +202,7 @@ void cChatWin::kickButtonClicked(){
     }
     send_string = "KICK "+ username + "\n";
     send(client_socket,buffer,MAX_LINE_BUFF,0);
-    status = readLine(client_socket,buffer,MAX_LINE_BUFF);
+    status = readLine(client_socket,buffer,MAX_LINE_BUFF,0);
     if(status<0){
         theTimer->stop();
         QMessageBox::critical(NULL,"Lost Connection","The serer has closed the connection.");
@@ -242,7 +242,7 @@ void cChatWin::topicButtonClicked(){
     temp = topic.toAscii();
     send_string = "TOPIC " + temp.toStdString()+"\n";
     send(client_socket, send_string.c_str(),send_string.length(),0);
-    status = readLine(client_socket,buffer,MAX_LINE_BUFF);
+    status = readLine(client_socket,buffer,MAX_LINE_BUFF,0);
     if(status<0){
         theTimer->stop();
         QMessageBox::critical(NULL, "Lost Connection", "The server has closed the connection.");
@@ -272,7 +272,7 @@ void cChatWin::quitButtonClicked()
     int status;
     send_string = "QUIT\n";
     send(client_socket, send_string.c_str(), send_string.length(), 0);
-    status = readLine(client_socket, buffer, MAX_LINE_BUFF);
+    status = readLine(client_socket, buffer, MAX_LINE_BUFF,0);
     if (status < 0) {
         theTimer->stop();
         QMessageBox::critical(NULL, "Lost Connection","The server has closed the connection.");
@@ -292,7 +292,7 @@ void cChatWin::timerFired()
     char buffer[MAX_LINE_BUFF];
     commands cmd;
     string str;
-    while((status = readLine(client_socket,buffer,MAX_LINE_BUFF))!=0){
+    while((status = readLine(client_socket,buffer,MAX_LINE_BUFF,100))!=0){
 
         qApp->processEvents();
         if(status<0){
@@ -385,7 +385,4 @@ void cChatWin::timerFired()
     }
     theTimer->start(250);
 }
-int main(void){
-    return 0;
-}
- 
+
