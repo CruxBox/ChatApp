@@ -9,16 +9,13 @@
 #include <qinputdialog.h>
 #include <Qt>
 cChatWin::cChatWin() : QMainWindow(){
-    this->setWindowTitle("Chat Client");
     QWidget *big = new QWidget();
-    big->setMinimumHeight(350);
+    big->setMinimumHeight(330);
     big->setMinimumWidth(400);
-    QVBoxLayout *main = new QVBoxLayout(this);
+    QVBoxLayout *main = new QVBoxLayout();
     main->setSpacing(3);
-    this->setCentralWidget(big);
     
     QHBoxLayout *row1 = new QHBoxLayout();
-    main->addLayout(row1);
     row1->heightForWidth(280);
     chatEdit = new QTextEdit();
     chatEdit->setMinimumWidth(300);
@@ -28,9 +25,9 @@ cChatWin::cChatWin() : QMainWindow(){
     userList->setMaximumWidth(100);
     row1->addWidget(chatEdit);
     row1->addWidget(userList);
+    main->addLayout(row1);
     
     QHBoxLayout *row2 = new QHBoxLayout();
-    main->addLayout(row2);
     msgEdit = new QLineEdit();
     row2->addWidget(msgEdit);
     msgEdit->setMinimumWidth(250);
@@ -40,7 +37,7 @@ cChatWin::cChatWin() : QMainWindow(){
     QPushButton *privButton = new QPushButton("Send &Private");
     row2->addWidget(privButton);
     this->connect(privButton, SIGNAL(clicked()), this,
-    SLOT(privButtonClicked()));
+    SLOT(pvtButtonClicked()));
     QPushButton *opButton = new QPushButton("&Op");
     row2->addWidget(opButton);
     this->connect(opButton, SIGNAL(clicked()), this, SLOT(opButtonClicked()));
@@ -56,10 +53,12 @@ cChatWin::cChatWin() : QMainWindow(){
     row2->addWidget(quitButton);
     this->connect(quitButton, SIGNAL(clicked()), this,
     SLOT(quitButtonClicked()));
-
+    main->addLayout(row2);
     theTimer = new QTimer(this);
     this->connect(theTimer,SIGNAL(timeout()),this,SLOT(timerFired()));
     theTimer->start(250);
+
+    setCentralWidget(big);
 }
 
 cChatWin::~cChatWin(){

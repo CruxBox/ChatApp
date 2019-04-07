@@ -74,6 +74,7 @@ int main(int argc,char *argv[]){
     while(1){
         connsock=accept(listensock,(sockaddr*)NULL,NULL);
         result=pthread_create(&thread_id,NULL,thread_proc,(void*)(intptr_t)connsock);
+        cout<<"Thread created\n";
         if(result!=0){
             printf("Thread not created.\n");
             exit(3);
@@ -104,6 +105,7 @@ void* thread_proc(void* arg){
     ioctl(sock,FIONBIO,&flag);
     while(!quit){
         status=readLine(sock,BUFFER,MAX_LINE_BUFF);
+        cout<<"Number of bytes received from readLine: "<<status<<endl;
         if(status<0){
             //check this out
             if(joined){
@@ -113,6 +115,7 @@ void* thread_proc(void* arg){
         }
         else if(status>0){
             command=decodeCommand(BUFFER);
+            cout<<"Decoded Command: "<<command.command<<endl;
             if(!joined &&command.command!="JOIN"){
                 return_msg="203 DENIED - MUST JOIN FIRST";
             }
@@ -151,8 +154,7 @@ void* thread_proc(void* arg){
                 }
                 else{
                     return_msg="900 UNKNOWN COMMAND";
-                }
-                
+                }                
             }
             return_msg+="\n";
             send(sock,return_msg.c_str(),return_msg.length(),0);

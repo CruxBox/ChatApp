@@ -12,7 +12,7 @@
 #include "logindlg.h"
 #include "chatwin.h"
 #include "chatcli.h"
-
+#include <iostream>
 #include <qapplication.h>
 #include <qmessagebox.h>
 using namespace std;
@@ -57,7 +57,7 @@ int main(int argc, char** argv){
 int connectAndJoin(string host, int port, string nickname){
 struct sockaddr_in server;
 client_socket=socket(AF_INET,SOCK_STREAM,0);
-bzero(&server,sizeof(server));
+memset(&server,'0',sizeof(server));
 server.sin_addr.s_addr=INADDR_ANY;
 server.sin_port=htons(port);
 server.sin_family = AF_INET;
@@ -72,6 +72,7 @@ if(dotaddr){
     else{
         server.sin_addr.s_addr = inet_addr("0.0.0.0");
     }
+    std::cout<<"Reached. s_add: "<<inet_ntoa(server.sin_addr)<<endl;
     if(connect(client_socket,(const sockaddr*)&server,sizeof(server))!=0) {
         QMessageBox::critical(NULL, "Connection Failed","Unable to Connect.");
         close(client_socket);
@@ -81,10 +82,15 @@ if(dotaddr){
     ioctl(client_socket,FIONBIO,&flag);
     
     joinString = "JOIN " + nickname + "\n";
-    send(client_socket,joinString.c_str(),joinString.length(),0);
-    readLine(client_socket,buffer,MAX_LINE_BUFF,0);
+    int sent_bytes = send(client_socket,joinString.c_str(),joinString.length(),0);
+    cout<<"Bytes sent to join: "<<sent_bytes<<endl;
+    int stats = readLine(client_socket,buffer,MAX_LINE_BUFF,0);
+    if(stats<=0){
+        cout<<"0 bytes received from server.\n";
+        exit(-100);
+    }
     cmd = decodeCommand(buffer);
-
+    cout<<"Decoded Command is: "<<cmd.command<<endl;
     if(cmd.command=="100"){
         return 1;
     }    
