@@ -105,7 +105,6 @@ void* thread_proc(void* arg){
     ioctl(sock,FIONBIO,&flag);
     while(!quit){
         status=readLine(sock,BUFFER,MAX_LINE_BUFF);
-        cout<<"Number of bytes received from readLine: "<<status<<endl;
         if(status<0){
             //check this out
             if(joined){

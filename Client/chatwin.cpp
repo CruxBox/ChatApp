@@ -14,9 +14,8 @@ cChatWin::cChatWin() : QMainWindow(){
     big->setMinimumWidth(400);
     QVBoxLayout *main = new QVBoxLayout();
     main->setSpacing(3);
-    
+
     QHBoxLayout *row1 = new QHBoxLayout();
-    row1->heightForWidth(280);
     chatEdit = new QTextEdit();
     chatEdit->setMinimumWidth(300);
     chatEdit->setReadOnly(true);
@@ -26,7 +25,7 @@ cChatWin::cChatWin() : QMainWindow(){
     row1->addWidget(chatEdit);
     row1->addWidget(userList);
     main->addLayout(row1);
-    
+
     QHBoxLayout *row2 = new QHBoxLayout();
     msgEdit = new QLineEdit();
     row2->addWidget(msgEdit);
@@ -58,7 +57,8 @@ cChatWin::cChatWin() : QMainWindow(){
     this->connect(theTimer,SIGNAL(timeout()),this,SLOT(timerFired()));
     theTimer->start(250);
 
-    setCentralWidget(big);
+    big->setLayout(main);
+    this->setCentralWidget(big);
 }
 
 cChatWin::~cChatWin(){
