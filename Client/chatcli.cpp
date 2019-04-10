@@ -65,19 +65,15 @@ int flag=1;
 char buffer[MAX_LINE_BUFF];
 string joinString;
 commands cmd;
-hostent *dotaddr=gethostbyname(host.c_str());
-if(dotaddr){
-    bcopy((const void*) dotaddr->h_addr_list[0],(void*)&server.sin_addr.s_addr,dotaddr->h_length);
-    } 
-    else{
-        server.sin_addr.s_addr = inet_addr("0.0.0.0");
-    }
+
+    server.sin_addr.s_addr = inet_addr(host.c_str());
     std::cout<<"Reached. s_add: "<<inet_ntoa(server.sin_addr)<<endl;
     if(connect(client_socket,(const sockaddr*)&server,sizeof(server))!=0) {
         QMessageBox::critical(NULL, "Connection Failed","Unable to Connect.");
         close(client_socket);
         return 0;
     }
+
     setsockopt(client_socket,0,TCP_NODELAY,&flag,sizeof(int));
     ioctl(client_socket,FIONBIO,&flag);
     

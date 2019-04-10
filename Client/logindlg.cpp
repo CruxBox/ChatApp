@@ -17,7 +17,7 @@ cLoginDlg:: cLoginDlg(QWidget *parent) : QDialog(parent){
     
     QVBoxLayout *main = new QVBoxLayout();
     this->setLayout(main);
-    QHBoxLayout *row1 = new QHBoxLayout(this);
+    QHBoxLayout *row1 = new QHBoxLayout();
     row1->setSpacing(3);
     QLabel* hostlabel = new QLabel();
     hostlabel->setText("Host");
